@@ -1,16 +1,7 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
-*/
 
+//for testing purposes
 Route::get('/loginform', function(){
 	return View::make('hello');
 			});
@@ -42,12 +33,13 @@ Route::get('/', function(){
 	return Response::json(['content' => 'main page']);
 });
 
-//para testear
-// obtener token
+// for testing
+// get token:
 // curl -X POST -d "email=test@mail.com&password=pass" http://localhost:8000/login
-// curl -v -H "token: blabla" http://localhost:8000/secret
+// send token:
+// curl -v -H "token: blahblah" http://localhost:8000/secret
 
-//si se trata curl -v http://localhost:8000/secret se obtiene 401
+//trying to access without token -v http://localhost:8000/secret returns 401
 Route::get('/secret', function(){
 	if(authenticated(Request::header('token'))){
 		return Response::json(['content' => 'secret page']);
@@ -57,6 +49,7 @@ Route::get('/secret', function(){
 	}
 });
 
+//TODO: move this function to proper place
 function authenticated($token){
 	$user = User::where('authentication_token', '=', $token)->get();
 	if($token && $user->count() > 0){
